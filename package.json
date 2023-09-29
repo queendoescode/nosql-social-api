@@ -1,0 +1,24 @@
+{
+  "name": "nosql-social-api",
+  "version": "1.0.0",
+  "description": "This project implements an API service using Node.js, Express.js, Mongoose and MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/queendoescode/nosql-social-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/queendoescode/nosql-social-api/issues"
+  },
+  "homepage": "https://github.com/queendoescode/nosql-social-api#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.5.3"
+  }
+}
