@@ -1,8 +1,10 @@
 const { Schema, model, SchemaType, default: mongoose } = require('mongoose');
 
-const formatDate = date => {
-  // TODO: Write this
-}
+const dayjs = require('dayjs');
+const localizedFormat = require('dayjs/plugin/localizedFormat');
+dayjs.extend(localizedFormat);
+
+const formatDate = date => dayjs(date).format('lll');
 
 const reactionSchema = new Schema(
   {
