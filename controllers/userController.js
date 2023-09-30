@@ -68,7 +68,61 @@ module.exports = {
     }
   },
 
-  async addFriend(req, res) { },
+  async addFriend(req, res) { 
+    try {
+      const userId = req.params.userId;
+      const friendId = req.params.friendId;
 
-  async removeFriend(req, res) { },
+      const user = await User.findOneAndUpdate(
+        { 
+          _id: userId
+        },
+        {
+          $addToSet: {
+            friends: friendId
+          }
+        },
+        {
+          new: true
+        }
+      );
+
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json('There is no user with that ID');
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  async removeFriend(req, res) { 
+    try {
+      const userId = req.params.userId;
+      const friendId = req.params.friendId;
+
+      const user = await User.findOneAndUpdate(
+        { 
+          _id: userId
+        },
+        {
+          $pull: {
+            friends: friendId
+          }
+        },
+        {
+          new: true
+        }
+      );
+
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json('There is no user with that ID');
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
