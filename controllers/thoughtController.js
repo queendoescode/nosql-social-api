@@ -57,7 +57,20 @@ module.exports = {
 
   async updateThought(req, res) {
     try {
-      const thought = await Thought.create(req.body);
+      const thoughtId = req.params.thoughtId;
+
+      const thought = await Thought.findOneAndUpdate(
+        { 
+          _id: thoughtId
+        },
+        {
+          thoughtText: req.body.thoughtText
+        },
+        {
+          new: true
+        }
+      );
+
       res.json(thought);
     } catch (err) {
       res.status(500).json(err);
