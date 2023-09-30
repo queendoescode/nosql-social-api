@@ -36,7 +36,22 @@ module.exports = {
 
   async updateUser(req, res) {
     try {
-      const user = await User.create(req.body);
+      const userId = req.params.userId;
+
+      const filter = { // Filter: This selects the document we want to update
+        _id: userId
+      };
+
+      const update = { // Update: Describes the change we want to make
+        username: req.body.username,
+        email: req.body.email
+      };
+
+      const options = { // Options: `new` means return the updated document
+        new: true
+      };
+
+      const user = await User.findOneAndUpdate(filter, update, options);
       res.json(user);
     } catch (err) {
       res.status(500).json(err);
@@ -45,7 +60,8 @@ module.exports = {
 
   async deleteUser(req, res) {
     try {
-      const user = await User.create(req.body);
+      const userId = req.params.userId;
+      const user = await User.deleteOne({_id: userId});
       res.json(user);
     } catch (err) {
       res.status(500).json(err);
