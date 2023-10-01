@@ -14,4 +14,4 @@ This project implements an API service using Node.js, Express.js, Mongoose and M
 
 ## Third Party Resources used by this site
 
-None.
+* npm package `validator` for email validation.

@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 
+const validator = require('validator');
+
 const userSchema = new Schema(
   {
     username: {
@@ -14,7 +16,7 @@ const userSchema = new Schema(
       required: true,
       validate: {
         validator: function(v) {
-          return /^\S+@\S+$/.test(v);
+          return validator.isEmail(v);
         },
         message: props => `${props.value} is not a valid email`
       },
