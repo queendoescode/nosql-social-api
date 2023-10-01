@@ -79,8 +79,14 @@ module.exports = {
 
   async deleteThought(req, res) {
     try {
-      const thought = await Thought.create(req.body);
-      res.json(thought);
+      const thoughtId = req.params.thoughtId;
+
+      const result = await Thought.deleteOne(
+        {
+          _id: thoughtId
+        }
+      );
+      res.json(result);
     } catch (err) {
       res.status(500).json(err);
     }
