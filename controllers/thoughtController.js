@@ -92,7 +92,62 @@ module.exports = {
     }
   },
   
-  async addReaction(req, res) { },
+  async addReaction(req, res) { 
+    try {
+      const thoughtId = req.params.thoughtId;
+
+      const thought = await Thought.findOneAndUpdate(
+        { 
+          _id: thoughtId
+        },
+        {
+          $push: {
+            reactions: req.body
+          }
+        },
+        {
+          new: true
+        }
+      );
+
+      if (thought) {
+        res.json(thought);
+      } else {
+        res.status(404).json('There is no thought with that ID');
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
   
-  async removeReaction(req, res) { },
+  async removeReaction(req, res) { 
+    try {
+      const thoughtId = req.params.thoughtId;
+      const reactionId = req.params.reactionId;
+
+      const thought = await Thought.findOneAndUpdate(
+        { 
+          _id: thoughtId
+        },
+        {
+          $pull: {
+            reactions: {
+              reactionId: reactionId
+            }
+          }
+        },
+        {
+          new: true
+        }
+      );
+
+      if (thought) {
+        res.json(thought);
+      } else {
+        res.status(404).json('There is no thought with that ID');
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
