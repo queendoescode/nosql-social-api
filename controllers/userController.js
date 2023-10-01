@@ -14,7 +14,8 @@ module.exports = {
 
   async getSingleUser(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.userId }).populate('friends');
+      const user = await User.findOne({ _id: req.params.userId })
+        .populate(['thoughts', 'friends']);
 
       !user
         ? res.status(404).json({ message: 'No user with that ID' })
