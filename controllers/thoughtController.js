@@ -71,7 +71,11 @@ module.exports = {
         }
       );
 
-      res.json(thought);
+      if (thought) {
+        res.json(thought);
+      } else {
+        res.status(404).json("There is no thought with that ID");
+      }
     } catch (err) {
       res.status(500).json(err);
     }

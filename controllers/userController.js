@@ -53,7 +53,11 @@ module.exports = {
       };
 
       const user = await User.findOneAndUpdate(filter, update, options);
-      res.json(user);
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ message: 'No user with that ID' });
+      }
     } catch (err) {
       res.status(500).json(err);
     }
@@ -79,7 +83,7 @@ module.exports = {
         const result = await User.deleteOne({_id: userId});
         res.json(result);
       } else {
-        res.status(400).json('No such user exists');
+        res.status(404).json('No such user exists');
       }
     } catch (err) {
       res.status(500).json(err);
