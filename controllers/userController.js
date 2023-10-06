@@ -7,7 +7,6 @@ module.exports = {
       const users = await User.find();
       res.json(users);
     } catch (err) {
-      console.error({ message: err });
       return res.status(500).json(err);
     }
   },
@@ -53,6 +52,7 @@ module.exports = {
       };
 
       const user = await User.findOneAndUpdate(filter, update, options);
+
       if (user) {
         res.json(user);
       } else {

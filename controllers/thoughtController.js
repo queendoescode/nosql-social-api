@@ -16,6 +16,9 @@ module.exports = {
     try {
       const thought = await Thought.findOne({ _id: req.params.thoughtId });
 
+      // Note that getters must be enabled so that createdAt
+      // will be properly formatted as a date.
+
       !thought
         ? res.status(404).json({ message: 'No thought with that ID' })
         : res.json(thought.toJSON({ getters: true }));
@@ -34,6 +37,8 @@ module.exports = {
       if (user) {
         const thought = await Thought.create(req.body);
 
+        // Add the thought ID to the user document's thoughts array.
+
         await User.findOneAndUpdate(
           { 
             _id: userId
@@ -49,7 +54,6 @@ module.exports = {
       } else {
         res.status(400).json('This user does not exist.');
       }
-
     } catch (err) {
       res.status(500).json(err);
     }
