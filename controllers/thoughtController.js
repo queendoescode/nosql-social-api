@@ -94,7 +94,12 @@ module.exports = {
           _id: thoughtId
         }
       );
-      res.json(result);
+
+      if (result.deletedCount === 0) {
+        res.status(404).json("This thought was not found");
+      } else {
+        res.json(result);
+      }
     } catch (err) {
       res.status(500).json(err);
     }
