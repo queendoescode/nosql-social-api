@@ -95,24 +95,30 @@ module.exports = {
       const userId = req.params.userId;
       const friendId = req.params.friendId;
 
-      const user = await User.findOneAndUpdate(
-        { 
-          _id: userId
-        },
-        {
-          $addToSet: {
-            friends: friendId
-          }
-        },
-        {
-          new: true
-        }
-      );
+      const friend = await User.findById(friendId);
 
-      if (user) {
-        res.json(user);
+      if (friend) {
+        const user = await User.findOneAndUpdate(
+          { 
+            _id: userId
+          },
+          {
+            $addToSet: {
+              friends: friendId
+            }
+          },
+          {
+            new: true
+          }
+        );
+
+        if (user) {
+          res.json(user);
+        } else {
+          res.status(404).json('There is no user with that ID');
+        }
       } else {
-        res.status(404).json('There is no user with that ID');
+        res.status(404).json('There is no user with that friend ID');
       }
     } catch (err) {
       res.status(500).json(err);
@@ -124,22 +130,32 @@ module.exports = {
       const userId = req.params.userId;
       const friendId = req.params.friendId;
 
-      const user = await User.findOneAndUpdate(
-        { 
-          _id: userId
-        },
-        {
-          $pull: {
-            friends: friendId
-          }
-        },
-        {
-          new: true
-        }
-      );
+      // Check that friend ID is valid for this user.
 
-      if (user) {
-        res.json(user);
+      const userBeforeUpdate = await User.findById(userId);
+      
+      if (userBeforeUpdate) {
+        const hasFriend = userBeforeUpdate.friends.includes(friendId);
+
+        if (hasFriend) {
+          const user = await User.findOneAndUpdate(
+            { 
+              _id: userId
+            },
+            {
+              $pull: {
+                friends: friendId
+              }
+            },
+            {
+              new: true
+            }
+          );
+
+          res.json(user);
+        } else {
+          res.status(404).json('User has no friend with that ID');
+        }
       } else {
         res.status(404).json('There is no user with that ID');
       }

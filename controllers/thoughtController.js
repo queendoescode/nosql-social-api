@@ -138,24 +138,37 @@ module.exports = {
       const thoughtId = req.params.thoughtId;
       const reactionId = req.params.reactionId;
 
-      const thought = await Thought.findOneAndUpdate(
-        { 
-          _id: thoughtId
-        },
-        {
-          $pull: {
-            reactions: {
-              reactionId: reactionId
-            }
-          }
-        },
-        {
-          new: true
-        }
-      );
+      // To check whether the reaction ID is valid,
+      // we need to fetch the thought before updating.
 
-      if (thought) {
-        res.json(thought);
+      const thoughtBeforeUpdate = await Thought.findById(thoughtId);
+
+      if (thoughtBeforeUpdate) {
+        // Search the reactions array for a reaction matching the reaction ID.
+        const findReaction = thoughtBeforeUpdate.reactions
+          .find(reaction => reaction.reactionId.equals(reactionId));
+
+        if (findReaction) {
+          const thoughtAfterUpdate = await Thought.findOneAndUpdate(
+            { 
+              _id: thoughtId
+            },
+            {
+              $pull: {
+                reactions: {
+                  reactionId: reactionId
+                }
+              }
+            },
+            {
+              new: true
+            }
+          );
+
+          res.json(thoughtAfterUpdate);
+        } else {
+          res.status(404).json('There is no reaction with that ID');
+        }
       } else {
         res.status(404).json('There is no thought with that ID');
       }
